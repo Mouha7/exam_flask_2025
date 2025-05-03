@@ -48,15 +48,30 @@
     </nav>
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div id="notifications" class="notification-container">
+        <div id="notifications" class="fixed top-20 right-5 w-80 max-w-full z-50 space-y-2">
             {% with messages = get_flashed_messages(with_categories=true) %}
                 {% if messages %}
                     {% for category, message in messages %}
-                        <div class="alert alert-{{ category }}">
-                            {{ message }}
-                            <button type="button" class="absolute top-2 right-2 text-gray-400 hover:text-gray-500" onclick="this.parentElement.remove()">
-                                <i class="bi bi-x"></i>
-                            </button>
+                        {% set alert_class = {
+                            'success': 'bg-green-50 text-green-800 border-l-4 border-green-400',
+                            'info': 'bg-blue-50 text-blue-800 border-l-4 border-blue-400',
+                            'warning': 'bg-yellow-50 text-yellow-800 border-l-4 border-yellow-400',
+                            'danger': 'bg-red-50 text-red-800 border-l-4 border-red-400'
+                        } %}
+                        <div class="p-4 rounded-md shadow-md relative {{ alert_class.get(category, alert_class['info']) }} animate-slide-in">
+                            <div class="flex items-start">
+                                {% set icon_class = {
+                                    'success': 'bi-check-circle text-green-500',
+                                    'info': 'bi-info-circle text-blue-500',
+                                    'warning': 'bi-exclamation-triangle text-yellow-500',
+                                    'danger': 'bi-x-circle text-red-500'
+                                } %}
+                                <i class="bi {{ icon_class.get(category, icon_class['info']) }} text-lg mr-3 mt-0.5"></i>
+                                <div class="flex-1">{{ message }}</div>
+                                <button type="button" class="ml-2 text-gray-400 hover:text-gray-600 transition-colors focus:outline-none" onclick="this.parentElement.parentElement.remove()">
+                                    <i class="bi bi-x text-lg"></i>
+                                </button>
+                            </div>
                         </div>
                     {% endfor %}
                 {% endif %}
@@ -82,6 +97,21 @@
             flashMessages.forEach(function(message) {
                 setTimeout(function() {
                     message.classList.add('fade-out');
+                    setTimeout(function() {
+                        message.remove();
+                    }, 500);
+                }, 5000);
+            });
+        });
+
+        // Fonction pour faire disparaître les messages flash après 5 secondes
+        document.addEventListener('DOMContentLoaded', function() {
+            const flashMessages = document.querySelectorAll('#notifications > div');
+            
+            flashMessages.forEach(function(message) {
+                setTimeout(function() {
+                    message.classList.remove('animate-slide-in');
+                    message.classList.add('animate-fade-out');
                     setTimeout(function() {
                         message.remove();
                     }, 500);

@@ -9,7 +9,7 @@
 
 Cuisine Collective est une plateforme web interactive permettant aux passionnés de cuisine de partager leurs recettes, de découvrir celles des autres et d'observer en temps réel qui cuisine quoi. Cette application utilise les technologies Flask, Tailwind CSS et Socket.IO pour offrir une expérience utilisateur fluide et moderne.
 
-![Aperçu de l'application](https://via.placeholder.com/800x400?text=Cuisine+Collective)
+![Aperçu de l'application](https://media.but-cuisines.fr/3_SIGNATURE/ambiance-cuisine-AMINA-1180x739_2.jpg)
 
 ## ✨ Fonctionnalités principales
 

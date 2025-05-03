@@ -4,20 +4,23 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Écouter les événements de cuisine
     socket.on('cooking_started', function(data) {
-        // Créer une notification
+        // Créer une notification avec un design amélioré
         const notif = document.createElement('div');
-        notif.className = 'alert alert-info';
+        notif.className = 'p-4 rounded-md shadow-md relative bg-blue-50 text-blue-800 border-l-4 border-blue-400 animate-slide-in';
         notif.innerHTML = `
-            <div class="flex items-center">
-                <i class="bi bi-fire mr-2 text-lg"></i>
-                <div>
-                    <span class="font-semibold">${data.user}</span> a commencé à cuisiner 
-                    <a href="/recipe/${data.recipe_id}" class="text-blue-600 hover:underline">${data.recipe_title}</a>
+            <div class="flex items-start">
+                <i class="bi bi-fire text-blue-500 text-lg mr-3 mt-0.5"></i>
+                <div class="flex-1">
+                    <p class="font-medium">Nouvelle activité culinaire</p>
+                    <p class="text-sm mt-0.5">
+                        <span class="font-semibold">${data.user}</span> a commencé à cuisiner 
+                        <a href="/recipe/${data.recipe_id}" class="text-blue-600 hover:underline font-medium">${data.recipe_title}</a>
+                    </p>
                 </div>
+                <button type="button" class="text-gray-400 hover:text-gray-600 focus:outline-none" onclick="this.parentElement.parentElement.remove()">
+                    <i class="bi bi-x text-lg"></i>
+                </button>
             </div>
-            <button type="button" class="absolute top-2 right-2 text-gray-400 hover:text-gray-500" onclick="this.parentElement.remove()">
-                <i class="bi bi-x"></i>
-            </button>
         `;
         
         // Ajouter la notification et la supprimer après 5 secondes
@@ -29,7 +32,8 @@ document.addEventListener('DOMContentLoaded', function() {
             playNotificationSound();
             
             setTimeout(function() {
-                notif.classList.add('fade-out');
+                notif.classList.remove('animate-slide-in');
+                notif.classList.add('animate-fade-out');
                 setTimeout(function() {
                     notif.remove();
                 }, 500);
@@ -38,20 +42,23 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     socket.on('cooking_stopped', function(data) {
-        // Créer une notification
+        // Créer une notification avec un design amélioré
         const notif = document.createElement('div');
-        notif.className = 'alert alert-warning';
+        notif.className = 'p-4 rounded-md shadow-md relative bg-yellow-50 text-yellow-800 border-l-4 border-yellow-400 animate-slide-in';
         notif.innerHTML = `
-            <div class="flex items-center">
-                <i class="bi bi-stop-circle mr-2 text-lg"></i>
-                <div>
-                    <span class="font-semibold">${data.user}</span> a arrêté de cuisiner 
-                    <a href="/recipe/${data.recipe_id}" class="text-blue-600 hover:underline">${data.recipe_title}</a>
+            <div class="flex items-start">
+                <i class="bi bi-stop-circle text-yellow-500 text-lg mr-3 mt-0.5"></i>
+                <div class="flex-1">
+                    <p class="font-medium">Fin d'activité culinaire</p>
+                    <p class="text-sm mt-0.5">
+                        <span class="font-semibold">${data.user}</span> a terminé de cuisiner 
+                        <a href="/recipe/${data.recipe_id}" class="text-yellow-700 hover:underline font-medium">${data.recipe_title}</a>
+                    </p>
                 </div>
+                <button type="button" class="text-gray-400 hover:text-gray-600 focus:outline-none" onclick="this.parentElement.parentElement.remove()">
+                    <i class="bi bi-x text-lg"></i>
+                </button>
             </div>
-            <button type="button" class="absolute top-2 right-2 text-gray-400 hover:text-gray-500" onclick="this.parentElement.remove()">
-                <i class="bi bi-x"></i>
-            </button>
         `;
         
         // Ajouter la notification à la page
@@ -64,7 +71,8 @@ document.addEventListener('DOMContentLoaded', function() {
             
             // Supprimer automatiquement après 5 secondes
             setTimeout(function() {
-                notif.classList.add('fade-out');
+                notif.classList.remove('animate-slide-in');
+                notif.classList.add('animate-fade-out');
                 setTimeout(function() {
                     notif.remove();
                 }, 500);
@@ -89,7 +97,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
-    // Mettre à jour la liste des cuisiniers
+    // Mettre à jour la liste des cuisiniers avec un design amélioré
     function updateLiveCookingList() {
         fetch('/api/live-cooking')
             .then(response => response.json())
@@ -101,9 +109,17 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 if (data.length === 0) {
                     liveList.innerHTML = `
-                        <div class="col-12 text-center">
-                            <p class="text-muted">Personne ne cuisine pour le moment...</p>
-                            <p>Soyez le premier à <a href="/recipes">choisir une recette</a> à cuisiner!</p>
+                        <div class="col-span-full bg-white rounded-lg shadow-md p-8 text-center">
+                            <div class="mb-4">
+                                <svg class="mx-auto h-16 w-16 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                                </svg>
+                            </div>
+                            <p class="text-gray-500 mb-4">Personne ne cuisine pour le moment...</p>
+                            <a href="/recipes" class="inline-block px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors">
+                                <i class="bi bi-search mr-1"></i>
+                                Trouver une recette à cuisiner
+                            </a>
                         </div>
                     `;
                     return;
@@ -111,22 +127,29 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 data.forEach(cook => {
                     const cookItem = document.createElement('div');
-                    cookItem.className = 'md:w-1/3 mb-4 px-2';
+                    cookItem.className = 'bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1';
                     cookItem.innerHTML = `
-                        <div class="bg-white rounded-lg shadow-md overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
-                            <div class="p-4">
-                                <h5 class="text-lg font-medium mb-2 flex items-center">
-                                    <i class="bi bi-person-circle mr-2"></i>${cook.user}
-                                </h5>
-                                <p class="text-gray-700 mb-3">
-                                    <i class="bi bi-fire mr-2 text-red-500"></i>Cuisine actuellement : 
-                                    <a href="/recipe/${cook.recipe_id}" class="text-primary-600 hover:underline">${cook.recipe_title}</a>
+                        <div class="p-5">
+                            <h5 class="text-xl font-semibold mb-3 flex items-center">
+                                <i class="bi bi-person-circle mr-2 text-blue-600"></i>
+                                ${cook.user}
+                            </h5>
+                            <div class="bg-blue-50 rounded-md p-3 mb-4">
+                                <p class="text-gray-700 flex items-start">
+                                    <i class="bi bi-fire mr-2 text-red-500 mt-1"></i>
+                                    <span>
+                                        <span class="text-sm text-gray-500">Cuisine actuellement:</span><br>
+                                        <a href="/recipe/${cook.recipe_id}" 
+                                           class="text-blue-600 hover:underline font-medium">
+                                            ${cook.recipe_title}
+                                        </a>
+                                    </span>
                                 </p>
-                                <div class="flex justify-center items-center mt-3 space-x-2">
-                                    <div class="animate-pulse h-2 w-2 rounded-full bg-red-500"></div>
-                                    <div class="animate-pulse h-2 w-2 rounded-full bg-yellow-500"></div>
-                                    <div class="animate-pulse h-2 w-2 rounded-full bg-green-500"></div>
-                                </div>
+                            </div>
+                            <div class="flex justify-center items-center space-x-3">
+                                <div class="animate-pulse h-3 w-3 rounded-full bg-red-500"></div>
+                                <div class="animate-pulse delay-75 h-3 w-3 rounded-full bg-yellow-500"></div>
+                                <div class="animate-pulse delay-150 h-3 w-3 rounded-full bg-green-500"></div>
                             </div>
                         </div>
                     `;
