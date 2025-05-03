@@ -1083,6 +1083,11 @@ select {
   margin-right: auto;
 }
 
+.my-10 {
+  margin-top: 2.5rem;
+  margin-bottom: 2.5rem;
+}
+
 .mb-0 {
   margin-bottom: 0px;
 }
@@ -1179,6 +1184,14 @@ select {
   margin-top: auto;
 }
 
+.ml-2 {
+  margin-left: 0.5rem;
+}
+
+.ml-1 {
+  margin-left: 0.25rem;
+}
+
 .line-clamp-2 {
   overflow: hidden;
   display: -webkit-box;
@@ -1246,6 +1259,14 @@ select {
   height: 12rem;
 }
 
+.h-4 {
+  height: 1rem;
+}
+
+.h-3 {
+  height: 0.75rem;
+}
+
 .w-12 {
   width: 3rem;
 }
@@ -1266,12 +1287,28 @@ select {
   width: 100%;
 }
 
+.w-4 {
+  width: 1rem;
+}
+
+.w-3 {
+  width: 0.75rem;
+}
+
+.w-auto {
+  width: auto;
+}
+
 .max-w-4xl {
   max-width: 56rem;
 }
 
 .max-w-7xl {
   max-width: 80rem;
+}
+
+.max-w-md {
+  max-width: 28rem;
 }
 
 .transform {
@@ -1435,6 +1472,10 @@ select {
   border-left-width: 4px;
 }
 
+.border-t {
+  border-top-width: 1px;
+}
+
 .border-gray-200 {
   --tw-border-opacity: 1;
   border-color: rgb(229 231 235 / var(--tw-border-opacity));
@@ -1524,6 +1565,16 @@ select {
   background-color: rgb(219 234 254 / var(--tw-bg-opacity));
 }
 
+.bg-green-50 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(240 253 244 / var(--tw-bg-opacity));
+}
+
+.bg-yellow-50 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(254 252 232 / var(--tw-bg-opacity));
+}
+
 .bg-gradient-to-r {
   background-image: linear-gradient(to right, var(--tw-gradient-stops));
 }
@@ -1563,6 +1614,10 @@ select {
 
 .p-8 {
   padding: 2rem;
+}
+
+.p-3 {
+  padding: 0.75rem;
 }
 
 .px-2 {
@@ -1763,8 +1818,27 @@ select {
   color: rgb(30 64 175 / var(--tw-text-opacity));
 }
 
+.text-blue-100 {
+  --tw-text-opacity: 1;
+  color: rgb(219 234 254 / var(--tw-text-opacity));
+}
+
+.text-green-700 {
+  --tw-text-opacity: 1;
+  color: rgb(21 128 61 / var(--tw-text-opacity));
+}
+
+.text-yellow-700 {
+  --tw-text-opacity: 1;
+  color: rgb(161 98 7 / var(--tw-text-opacity));
+}
+
 .opacity-90 {
   opacity: 0.9;
+}
+
+.opacity-80 {
+  opacity: 0.8;
 }
 
 .shadow {
@@ -1819,6 +1893,14 @@ select {
   transition-property: transform;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   transition-duration: 150ms;
+}
+
+.delay-150 {
+  transition-delay: 150ms;
+}
+
+.delay-75 {
+  transition-delay: 75ms;
 }
 
 .duration-200 {
@@ -2048,6 +2130,10 @@ select {
 
   .md\:grid-cols-2 {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .md\:grid-cols-3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
   .md\:flex-row {

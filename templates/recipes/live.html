@@ -3,35 +3,91 @@
 {% block title %}Cuisine en direct{% endblock %}
 
 {% block content %}
-<h1 class="mb-4">Cuisine en direct</h1>
-<p class="lead mb-5">Découvrez ce que les autres membres sont en train de cuisiner en ce moment!</p>
+<div id="notifications"></div>
 
-<div id="live-cooking-list" class="row">
+<!-- En-tête avec style amélioré -->
+<div class="bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-lg shadow-lg p-6 mb-8">
+    <h1 class="text-3xl font-bold mb-2">Cuisine en direct</h1>
+    <p class="text-lg opacity-90">Découvrez ce que les autres membres sont en train de cuisiner en ce moment!</p>
+    <div class="mt-4 flex space-x-2">
+        <div class="animate-pulse h-2 w-2 rounded-full bg-red-500"></div>
+        <div class="animate-pulse h-2 w-2 rounded-full bg-yellow-500"></div>
+        <div class="animate-pulse h-2 w-2 rounded-full bg-green-500"></div>
+        <span class="text-sm ml-1 text-blue-100">En direct</span>
+    </div>
+</div>
+
+<!-- Grille de cuisiniers -->
+<div id="live-cooking-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
     {% if cooking_data %}
         {% for cook in cooking_data %}
-            <div class="col-md-4 mb-4">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">{{ cook.user }}</h5>
-                        <p class="card-text">
-                            Cuisine actuellement : 
-                            <a href="{{ url_for('recipe_detail', recipe_id=cook.recipe_id) }}">{{ cook.recipe_title }}</a>
+            <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
+                <div class="p-5">
+                    <h5 class="text-xl font-semibold mb-3 flex items-center">
+                        <i class="bi bi-person-circle mr-2 text-blue-600"></i>
+                        {{ cook.user }}
+                    </h5>
+                    <div class="bg-blue-50 rounded-md p-3 mb-4">
+                        <p class="text-gray-700 flex items-start">
+                            <i class="bi bi-fire mr-2 text-red-500 mt-1"></i>
+                            <span>
+                                <span class="text-sm text-gray-500">Cuisine actuellement:</span><br>
+                                <a href="{{ url_for('recipe_detail', recipe_id=cook.recipe_id) }}" 
+                                   class="text-blue-600 hover:underline font-medium">
+                                    {{ cook.recipe_title }}
+                                </a>
+                            </span>
                         </p>
-                        <div class="text-center">
-                            <div class="spinner-border text-primary" role="status">
-                                <span class="visually-hidden">Cuisiner...</span>
-                            </div>
-                        </div>
+                    </div>
+                    <div class="flex justify-center items-center space-x-3">
+                        <div class="animate-pulse h-3 w-3 rounded-full bg-red-500"></div>
+                        <div class="animate-pulse delay-75 h-3 w-3 rounded-full bg-yellow-500"></div>
+                        <div class="animate-pulse delay-150 h-3 w-3 rounded-full bg-green-500"></div>
                     </div>
                 </div>
             </div>
         {% endfor %}
     {% else %}
-        <div class="col-12 text-center">
-            <p class="text-muted">Personne ne cuisine pour le moment...</p>
-            <p>Soyez le premier à <a href="{{ url_for('recipes_list') }}">choisir une recette</a> à cuisiner!</p>
+        <div class="col-span-full bg-white rounded-lg shadow p-8 text-center">
+            <div class="mb-4">
+                <img src="{{ url_for('static', filename='images/empty-cooking.svg') }}" 
+                     alt="Personne ne cuisine" 
+                     class="mx-auto h-40 w-auto opacity-80"
+                     onerror="this.onerror=null; this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxwYXRoIGQ9Ik0xMiA0YTggOCAwIDEwMCAxNiA4IDggMCAwMDAtMTZ6TTIgMTJDMiA2LjQ3NyA2LjQ3NyAyIDEyIDJzMTAgNC40NzcgMTAgMTAtNC40NzcgMTAtMTAgMTBTMiAxNy41MjMgMiAxMnoiIGZpbGw9IiNDNUQyRTAiLz48cGF0aCBkPSJNMTMgMTBjMC0uNTUyLS40NDgtMS0xLTFzLTEgLjQ0OC0xIDFjMCAuNTUyLjQ0OCAxIDEgMXMxLS40NDggMS0xek05IDEwYzAtLjU1Mi0uNDQ4LTEtMS0xcy0xIC40NDgtMSAxYzAgLjU1Mi40NDggMSAxIDFzMS0uNDQ4IDEtMXpNMTcgMTBjMC0uNTUyLS40NDgtMS0xLTFzLTEgLjQ0OC0xIDFjMCAuNTUyLjQ0OCAxIDEgMXMxLS40NDggMS0xeiIgZmlsbD0iI0M1RDJFMCIvPjwvc3ZnPg==';">
+            </div>
+            <p class="text-gray-500 mb-2">Personne ne cuisine pour le moment...</p>
+            <a href="{{ url_for('recipes_list') }}" 
+               class="inline-block px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors">
+                <i class="bi bi-search mr-1"></i>
+                Trouver une recette à cuisiner
+            </a>
         </div>
     {% endif %}
+</div>
+
+<!-- Section des statistiques -->
+<div class="bg-white rounded-lg shadow-md p-6 mb-6">
+    <h2 class="text-xl font-bold mb-4 text-gray-800 pb-2 border-b border-gray-200">Statistiques culinaires</h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="bg-blue-50 p-4 rounded-lg">
+            <div class="flex justify-between items-center">
+                <span class="text-sm text-gray-600">Cuisiniers actifs</span>
+                <span class="text-lg font-bold text-blue-700">{{ cooking_data|length if cooking_data else 0 }}</span>
+            </div>
+        </div>
+        <div class="bg-green-50 p-4 rounded-lg">
+            <div class="flex justify-between items-center">
+                <span class="text-sm text-gray-600">Recettes disponibles</span>
+                <span class="text-lg font-bold text-green-700">{{ recipe_count }}</span>
+            </div>
+        </div>
+        <div class="bg-yellow-50 p-4 rounded-lg">
+            <div class="flex justify-between items-center">
+                <span class="text-sm text-gray-600">Temps de préparation moyen</span>
+                <span class="text-lg font-bold text-yellow-700">{{ avg_time|default('-- min') }}</span>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}
 
