@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block title %}Cuisine en direct{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">Cuisine en direct</h1>
+<p class="lead mb-5">Découvrez ce que les autres membres sont en train de cuisiner en ce moment!</p>
+
+<div id="live-cooking-list" class="row">
+    {% if cooking_data %}
+        {% for cook in cooking_data %}
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ cook.user }}</h5>
+                        <p class="card-text">
+                            Cuisine actuellement : 
+                            <a href="{{ url_for('recipe_detail', recipe_id=cook.recipe_id) }}">{{ cook.recipe_title }}</a>
+                        </p>
+                        <div class="text-center">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Cuisiner...</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <div class="col-12 text-center">
+            <p class="text-muted">Personne ne cuisine pour le moment...</p>
+            <p>Soyez le premier à <a href="{{ url_for('recipes_list') }}">choisir une recette</a> à cuisiner!</p>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/live_cooking.js') }}"></script>
+{% endblock %}

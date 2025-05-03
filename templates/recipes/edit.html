@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+
+{% block title %}Modifier: {{ recipe.title }}{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto">
+    <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+        <div class="bg-gradient-to-r from-blue-600 to-blue-700 px-6 py-4">
+            <h3 class="text-xl font-bold text-white">Modifier votre recette</h3>
+        </div>
+        <div class="p-6">
+            <form method="POST" action="{{ url_for('recipe_edit', recipe_id=recipe.id) }}" enctype="multipart/form-data">
+                <!-- Titre -->
+                <div class="mb-5">
+                    <label for="title" class="block text-sm font-medium text-gray-700 mb-1">Titre</label>
+                    <input type="text" 
+                        class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50" 
+                        id="title" name="title" value="{{ recipe.title }}" required>
+                </div>
+                
+                <!-- Description -->
+                <div class="mb-5">
+                    <label for="description" class="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                    <textarea class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50" 
+                            id="description" name="description" rows="3" required>{{ recipe.description }}</textarea>
+                </div>
+                
+                <!-- Temps et difficulté -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-5">
+                    <div>
+                        <label for="cooking_time" class="block text-sm font-medium text-gray-700 mb-1">Temps de préparation (minutes)</label>
+                        <input type="number" 
+                               class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50" 
+                               id="cooking_time" name="cooking_time" min="1" value="{{ recipe.cooking_time }}" required>
+                    </div>
+                    <div>
+                        <label for="difficulty" class="block text-sm font-medium text-gray-700 mb-1">Difficulté</label>
+                        <select class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50" 
+                                id="difficulty" name="difficulty" required>
+                            <option value="">Choisir...</option>
+                            <option value="Facile" {% if recipe.difficulty == 'Facile' %}selected{% endif %}>Facile</option>
+                            <option value="Moyen" {% if recipe.difficulty == 'Moyen' %}selected{% endif %}>Moyen</option>
+                            <option value="Difficile" {% if recipe.difficulty == 'Difficile' %}selected{% endif %}>Difficile</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <!-- Ingrédients -->
+                <div class="mb-5">
+                    <label for="ingredients" class="block text-sm font-medium text-gray-700 mb-1">Ingrédients</label>
+                    <textarea class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50" 
+                              id="ingredients" name="ingredients" rows="6" 
+                              placeholder="Listez vos ingrédients (un par ligne)" required>{{ recipe.ingredients }}</textarea>
+                    <p class="mt-1 text-xs text-gray-500">Listez un ingrédient par ligne avec les quantités.</p>
+                </div>
+                
+                <!-- Instructions -->
+                <div class="mb-5">
+                    <label for="instructions" class="block text-sm font-medium text-gray-700 mb-1">Instructions</label>
+                    <textarea class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50" 
+                              id="instructions" name="instructions" rows="8" 
+                              placeholder="Décrivez les étapes (une par ligne)" required>{{ recipe.instructions }}</textarea>
+                    <p class="mt-1 text-xs text-gray-500">Décrivez chaque étape sur une nouvelle ligne.</p>
+                </div>
+                
+                <!-- Image -->
+                <div class="mb-6">
+                    <label for="image" class="block text-sm font-medium text-gray-700 mb-1">Image</label>
+                    {% if recipe.image_url %}
+                        <div class="mb-3">
+                            <img src="{{ url_for('static', filename=recipe.image_url) }}" 
+                                 alt="{{ recipe.title }}" 
+                                 class="h-48 object-cover rounded-md shadow-sm">
+                            <p class="mt-1 text-xs text-gray-500">Image actuelle. Téléchargez une nouvelle image pour remplacer.</p>
+                        </div>
+                    {% endif %}
+                    <input type="file" 
+                           id="image" name="image" accept="image/*"
+                           class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
+                </div>
+                
+                <!-- Boutons d'action -->
+                <div class="flex justify-end space-x-3">
+                    <a href="{{ url_for('recipe_detail', recipe_id=recipe.id) }}" 
+                       class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors">
+                        Annuler
+                    </a>
+                    <button type="submit" 
+                            class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors">
+                        Enregistrer les modifications
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

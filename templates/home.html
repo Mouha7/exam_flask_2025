@@ -1,0 +1,152 @@
+{% extends 'base.html' %} {% block title %}Cuisine Collective - Accueil{%
+endblock %} {% block content %}
+<div id="notifications"></div>
+
+<!-- Bannière d'accueil améliorée -->
+<div
+	class="bg-gradient-to-r from-blue-500 to-blue-700 rounded-lg shadow-lg p-8 mb-10 text-white"
+>
+	<h1 class="text-4xl font-bold mb-4">Bienvenue sur Cuisine Collective</h1>
+	<p class="text-xl mb-6 opacity-90">
+		Partagez vos recettes et découvrez ce que les autres cuisinent en temps
+		réel!
+	</p>
+	{% if not current_user.is_authenticated %}
+	<a
+		href="{{ url_for('register') }}"
+		class="inline-block px-6 py-3 bg-white text-blue-700 font-medium rounded-lg shadow hover:bg-blue-50 transition-colors duration-200"
+	>
+		Rejoignez-nous
+	</a>
+	{% else %}
+	<a
+		href="{{ url_for('recipe_create') }}"
+		class="inline-block px-6 py-3 bg-white text-blue-700 font-medium rounded-lg shadow hover:bg-blue-50 transition-colors duration-200"
+	>
+		<i class="bi bi-plus-circle mr-2"></i>Partagez une recette
+	</a>
+	{% endif %}
+</div>
+
+<!-- Section des recettes récentes -->
+<div class="mb-6">
+	<h2
+		class="text-2xl font-bold mb-6 text-gray-800 pb-2 border-b border-gray-200"
+	>
+		Recettes récentes
+	</h2>
+
+	<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+		{% for recipe in recipes.items %}
+		<div
+			class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300"
+		>
+            {% if recipe.image_url %}
+            <div class="h-40 overflow-hidden">
+                <img
+                    src="{{ url_for('static', filename=recipe.image_url) }}"
+                    class="w-full h-full object-cover transform hover:scale-105 transition-transform duration-300"
+                    alt="{{ recipe.title }}"
+                />
+            </div>
+            {% else %}
+            <div class="h-40 bg-gray-100 flex items-center justify-center">
+                <span class="text-gray-400 flex items-center">
+                    <i class="bi bi-image mr-2"></i>Pas d'image
+                </span>
+            </div>
+            {% endif %}
+
+			<div class="p-5">
+				<h3 class="text-xl font-semibold mb-2 text-gray-800">
+					{{ recipe.title }}
+				</h3>
+				<p class="text-gray-600 mb-4 line-clamp-2">
+					{{ recipe.description|truncate(100) }}
+				</p>
+
+				<div class="flex items-center justify-between mt-auto">
+					<a
+						href="{{ url_for('recipe_detail', recipe_id=recipe.id) }}"
+						class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md transition-colors duration-200"
+					>
+						Voir la recette
+					</a>
+					<span class="text-sm text-gray-500"
+						>{{ recipe.date_posted.strftime('%d/%m/%Y') }}</span
+					>
+				</div>
+			</div>
+		</div>
+		{% endfor %}
+	</div>
+</div>
+
+<!-- Pagination améliorée -->
+{% if recipes.pages > 1 %}
+<div class="flex justify-center mt-8">
+	<nav
+		class="inline-flex rounded-md shadow-sm -space-x-px"
+		aria-label="Pagination"
+	>
+		<!-- Bouton précédent -->
+		{% if recipes.has_prev %}
+		<a
+			href="{{ url_for('home', page=recipes.prev_num) }}"
+			class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
+		>
+			<span class="sr-only">Précédent</span>
+			<i class="bi bi-chevron-left"></i>
+		</a>
+		{% else %}
+		<span
+			class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-gray-100 text-sm font-medium text-gray-400 cursor-not-allowed"
+		>
+			<span class="sr-only">Précédent</span>
+			<i class="bi bi-chevron-left"></i>
+		</span>
+		{% endif %}
+
+		<!-- Numéros de page -->
+		{% for page_num in recipes.iter_pages() %} {% if page_num %} {% if
+		page_num == recipes.page %}
+		<span
+			class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-blue-50 text-sm font-medium text-blue-600"
+		>
+			{{ page_num }}
+		</span>
+		{% else %}
+		<a
+			href="{{ url_for('home', page=page_num) }}"
+			class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50"
+		>
+			{{ page_num }}
+		</a>
+		{% endif %} {% else %}
+		<span
+			class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700"
+		>
+			...
+		</span>
+		{% endif %} {% endfor %}
+
+		<!-- Bouton suivant -->
+		{% if recipes.has_next %}
+		<a
+			href="{{ url_for('home', page=recipes.next_num) }}"
+			class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
+		>
+			<span class="sr-only">Suivant</span>
+			<i class="bi bi-chevron-right"></i>
+		</a>
+		{% else %}
+		<span
+			class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-gray-100 text-sm font-medium text-gray-400 cursor-not-allowed"
+		>
+			<span class="sr-only">Suivant</span>
+			<i class="bi bi-chevron-right"></i>
+		</span>
+		{% endif %}
+	</nav>
+</div>
+{% endif %} {% endblock %}
